@@ -7,16 +7,15 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build and Package') {
+        stage('Syntax Check') {
             steps {
-                bat 'mvn -B clean package'
+                bat 'python -m py_compile app.py'
             }
         }
-    }
-
-    post {
-        success {
-            archiveArtifacts artifacts: 'target/*.jar'
+        stage('Run Application') {
+            steps {
+                bat 'python app.py'
+            }
         }
     }
 }
